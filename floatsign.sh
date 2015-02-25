@@ -371,6 +371,14 @@ else
 						fi
 						checkStatus
 					fi
+
+                    echo "Ensuring aps-environment is present and set to production"
+                    PlistBuddy -c "Print :aps-environment" "$TEMP_DIR/newEntitlements"
+                    if [ $? -ne 0 ]; then
+                        PlistBuddy -c "Add :aps-environment string production" "$TEMP_DIR/newEntitlements"
+                    fi
+                    PlistBuddy -c "Set :aps-environment production" "$TEMP_DIR/newEntitlements"
+
 					echo "Setting get-task-allow entitlement to NO"
 					PlistBuddy -c "Set :get-task-allow NO" "$TEMP_DIR/newEntitlements"
 				else
